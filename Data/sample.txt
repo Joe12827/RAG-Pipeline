@@ -1,0 +1,6 @@
+RAG systems combine retrieval and generation.
+Chunking is essential for effective retrieval.
+Different strategies have different trade-offs.
+
+For example, sentence chunking works well for factual Q&A,
+while paragraph chunking is better for preserving context.
