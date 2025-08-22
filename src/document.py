@@ -1,8 +1,14 @@
 class Document:
-    def __init__(self, text: str, vector: list, metadata: dict):
-        self.text = text
+    def __init__(self, vector: list, text: str = "", source: str = ""):
         self.vector = vector
-        self.metadata = metadata
+        self.text = text
+        self.source = source
+
+    def get_metadata(self):
+        return {
+            "text": self.text,
+            "source": self.source
+        }
 
     def __repr__(self):
         return f"Document(text={self.text[:50]!r}..., vector={self.vector!r}, metadata={self.metadata!r})"
