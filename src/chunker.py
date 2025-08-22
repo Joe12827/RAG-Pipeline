@@ -35,7 +35,7 @@ class ParagraphChunking(ChunkingStrategy):
 
 
 # Concrete Strategy 4 — Token-limited chunking
-class TokenLimitedChunking:
+class TokenLimitedChunking(ChunkingStrategy):
     """
     Note: This strategy returns tokenized chunks directly suitable for model input.
     It uses the tokenizer's `max_length` and `stride` parameters to create overlapping chunks.
@@ -49,16 +49,27 @@ class TokenLimitedChunking:
         self.overlap_tokens = overlap_tokens
 
     def chunk(self, text: str):
-        return self.tokenizer(
+        tokenized = self.tokenizer(
             text,
             max_length=self.max_tokens,
             truncation=True,
             stride=self.overlap_tokens,
             return_overflowing_tokens=True,
-            padding="max_length",
+            padding="longest",
             return_tensors="pt",
             add_special_tokens=False
         )
+    
+        input_ids = tokenized["input_ids"]
+        attention_masks = tokenized["attention_mask"]
+
+        # Decode each chunk back into text
+        decoded_chunks = [
+            self.tokenizer.decode(ids, skip_special_tokens=True).strip()
+            for ids in input_ids
+        ]
+
+        return tokenized, decoded_chunks
 
 # Concrete Strategy 5 — Multi-sentence chunking up to a limit
 class MultiSentenceChunking(ChunkingStrategy):

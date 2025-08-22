@@ -1,7 +1,13 @@
 from transformers import AutoTokenizer, AutoModel
+from abc import ABC, abstractmethod
 import torch
 import torch.nn.functional as F
 from tqdm import tqdm
+
+class Embedder(ABC):
+    @abstractmethod
+    def embed(self, inputs, already_tokenized: bool = False) -> str:
+        pass
 
 class Qwen3Embedder:
     def __init__(self, model_name="Qwen/Qwen3-Embedding-0.6B", device=None):
