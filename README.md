@@ -1,4 +1,4 @@
-# RAG Pipeline Portfolio
+# RAG Pipeline
 
 ## Overview
 The RAG Pipeline is a modular and extensible Retrieval-Augmented Generation (RAG) system designed to process, chunk, and embed documents from various formats. It enables efficient document ingestion and semantic search, making it ideal for building advanced AI-powered retrieval and question-answering systems.
