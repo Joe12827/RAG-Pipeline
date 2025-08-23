@@ -71,7 +71,7 @@ or Longitude either, but thought they were nice grand words to
 say.)
 ```
 
-### Fixed Size Chunking - 100 Characters
+### Fixed Size Chunking: 100 Characters
 
 ```
 [10 Chunks Generated]
@@ -142,7 +142,7 @@ of getting up and picking the daisies, when suddenly a White
 Rabbit with pink eyes ran close by her.
 ```
 
-### Token-Limited Chunking 512 Tokens + 10 Token Overlap
+### [Token-Limited Chunking](#https://github.com/Joe12827/RAG-Pipeline/blob/e48a47fe9318639df21d6a99b3f32d521ff8715b/src/chunker.py#L38): 512 Tokens + 10 Token Overlap
 
 ```
 [3 Chunks Generated]
@@ -152,9 +152,7 @@ Rabbit with pink eyes ran close by her.
 shall think nothing of tumbling down stairs!  How brave they'll
 all think me at home!  Why, I wouldn't say anything about it,
 even if I fell off the top of the house!' (Which was very likely
-true.)
-
-  Down, down, down.  Would the fall NEVER come to an end!  `I
+true.) Down, down, down.  Would the fall NEVER come to an end!  `I
 wonder how many miles I've fallen by
 
 --- Chunk 2 ---
@@ -177,5 +175,5 @@ say.)
 
 
 ## Author
-**Joe12827**
+**Joe Wesnofske - Joe12827**
 
