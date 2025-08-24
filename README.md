@@ -20,11 +20,11 @@ The RAG Pipeline is a modular and extensible Retrieval-Augmented Generation (RAG
 	- `BeautifulSoup4` (HTML extraction)
 - **Chunking:** Custom strategies (sentence, paragraph, etc.)
 - **Embedding:**
-	- `Qwen3` (for embedding generation)
+	- `Qwen3-Embedding-4B`
 - **Vector Database:**
-	- `pinecone-client` (for storing and searching embeddings)
+	- `Pinecone` (for storing and searching embeddings)
 - **LLM Integration:**
-	- `transformers` (HuggingFace for LLMs)
+	- `Llama-3` (From HuggingFace)
 - **Other:**
 	- `os` (file handling)
 	- `logging` (optional, for debug output)
@@ -199,11 +199,14 @@ chunk-12: Score: 0.5194
 chunk-5:  Score: 0.5010
 chunk-18: Score: 0.4938
 chunk-44: Score: 0.4789
-chunk-58: Score: 0.4637'
+chunk-58: Score: 0.4637
 
 Feeding context to LLM...
 
-Answer: After Alice drinks from the bottle labeled "Drink Me," she finds that it has a very mixed flavor of cherry-tart, custard, pine-apple, roast turkey, toffee, and hot buttered toast. She finishes it off quickly, and then notices that she has shrunk down to a tiny size, only 10 inches high.
+Answer: After Alice drinks from the bottle labeled "Drink Me," she finds that it has a very
+mixed flavor of cherry-tart, custard, pine-apple, roast turkey, toffee, and hot buttered toast.
+She finishes it off quickly, and then notices that she has shrunk down to a tiny size, only 10
+inches high.
 ```
 
 ## Author
