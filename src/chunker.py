@@ -27,7 +27,7 @@ class FixedSizeChunking(ChunkingStrategy):
     def chunk(self, text: str) -> list[str]:
         chunks = [text[i:i+self.chunk_size] for i in range(0, len(text), self.chunk_size)]
         normilized_chunks = [ChunkingStrategy.normilize_text(chunk) for chunk in chunks]
-        return normilized_chunks
+        return chunks
 
 
 # Concrete Strategy 2 — Sentence-based chunking
@@ -37,7 +37,7 @@ class SentenceChunking(ChunkingStrategy):
         doc = nlp(text)
         sentences = [sent.text for sent in doc.sents]
         normilized_sentences = [ChunkingStrategy.normilize_text(sentence) for sentence in sentences]
-        return normilized_sentences
+        return sentences
 
 
 # Concrete Strategy 3 — Paragraph-based chunking
@@ -45,7 +45,7 @@ class ParagraphChunking(ChunkingStrategy):
     def chunk(self, text: str) -> list[str]:
         paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
         normilized_paragraphs = [ChunkingStrategy.normilize_text(paragraph) for paragraph in paragraphs]
-        return normilized_paragraphs
+        return paragraphs
 
 
 # Concrete Strategy 4 — Token-limited chunking

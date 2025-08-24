@@ -33,7 +33,7 @@ class PDFTextExtractor(DocumentTextExtractor):
                 page_text = page.extract_text()
                 if page_text:
                     text += page_text + "\n"
-        return DocumentTextExtractor.clean_text_unicode(text)
+        return text
 
 
 # Concrete Strategy 2 — DOCX extractor
@@ -42,7 +42,7 @@ class DocxTextExtractor(DocumentTextExtractor):
         doc = docx.Document(file_path)
         paragraphs = [para.text for para in doc.paragraphs]
         text = "\n".join(paragraphs)
-        return DocumentTextExtractor.clean_text_unicode(text)
+        return text
 
 
 # Concrete Strategy 3 — Plain text extractor
@@ -50,7 +50,7 @@ class PlainTextExtractor(DocumentTextExtractor):
     def extract_text(self, file_path: str) -> str:
         with open(file_path, "r", encoding="utf-8") as f:
             text = f.read()
-            return DocumentTextExtractor.clean_text_unicode(text)
+            return text
 
 
 # Concrete Strategy 4 — HTML extractor
@@ -60,7 +60,7 @@ class HTMLTextExtractor(DocumentTextExtractor):
             html = f.read()
         soup = BeautifulSoup(html, "html.parser")
         text = soup.get_text(separator="\n", strip=True)
-        return DocumentTextExtractor.clean_text_unicode(text)
+        return text
 
 
 # Context

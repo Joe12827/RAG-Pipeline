@@ -77,10 +77,13 @@ say.)
 [10 Chunks Generated]
 
 --- Chunk 1 ---
-  `Well!' thought Alice to herself, `after such a fall as this, I shall think nothing of tumbling do
+  `Well!' thought Alice to herself, `after such a fall as this, I
+shall think nothing of tumbling do
 
 --- Chunk 2 ---
-wn stairs!  How brave they'll all think me at home!  Why, I wouldn't say anything about it, even if 
+wn stairs!  How brave they'll
+all think me at home!  Why, I wouldn't say anything about it,
+even if 
 
 --- Chunk 3 ---
 I fell off the top of the house!' (Which was very likely
@@ -88,12 +91,7 @@ true.)
 
   Down, down, down.  Would the fall
 
---- Chunk 4 ---
- NEVER come to an end!  `I
-wonder how many miles I've fallen by this time?' she said aloud. `I must 
-
---- Chunk 5 ---
-be getting somewhere near the centre of the earth.  Let me see:  that would be four thousand miles d
+--- Chunk n ---
 	.
 	.
 	.
@@ -104,19 +102,18 @@ be getting somewhere near the centre of the earth.  Let me see:  that would be f
 [10 Chunks Generated]
 
 --- Chunk 1 ---
-  `Well!' thought Alice to herself, `after such a fall as this, I shall think nothing of tumbling down stairs!  
+  `Well!' thought Alice to herself, `after such a fall as this, I
+shall think nothing of tumbling down stairs!  
 
 --- Chunk 2 ---
-How brave they'll all think me at home!  
+How brave they'll
+all think me at home!  
 
 --- Chunk 3 ---
-Why, I wouldn't say anything about it, even if I fell off the top of the house!'
+Why, I wouldn't say anything about it,
+even if I fell off the top of the house!'
 
---- Chunk 4 ---
-(Which was very likely true.)
-
---- Chunk 5 ---
-Down, down, down.
+--- Chunk n ---
 	.
 	.
 	.
@@ -128,21 +125,28 @@ Down, down, down.
 [2 Chunks Generated]
 
 --- Chunk 1 ---
-Alice was beginning to get very tired of sitting by her sister
-on the bank, and of having nothing to do:  once or twice she had
-peeped into the book her sister was reading, but it had no
-pictures or conversations in it, `and what is the use of a book,'
-thought Alice `without pictures or conversation?'
+`Well!' thought Alice to herself, `after such a fall as this, I
+shall think nothing of tumbling down stairs!  How brave they'll
+all think me at home!  Why, I wouldn't say anything about it,
+even if I fell off the top of the house!' (Which was very likely
+true.)
 
 --- Chunk 2 ---
-So she was considering in her own mind (as well as she could,
-for the hot day made her feel very sleepy and stupid), whether
-the pleasure of making a daisy-chain would be worth the trouble
-of getting up and picking the daisies, when suddenly a White
-Rabbit with pink eyes ran close by her.
+Down, down, down.  Would the fall NEVER come to an end!  `I
+wonder how many miles I've fallen by this time?' she said aloud.
+`I must be getting somewhere near the centre of the earth.  Let
+me see:  that would be four thousand miles down, I think--' (for,
+you see, Alice had learnt several things of this sort in her
+lessons in the schoolroom, and though this was not a VERY good
+opportunity for showing off her knowledge, as there was no one to
+listen to her, still it was good practice to say it over) `--yes,
+that's about the right distance--but then I wonder what Latitude
+or Longitude I've got to?'  (Alice had no idea what Latitude was,
+or Longitude either, but thought they were nice grand words to
+say.)
 ```
 
-### [Token-Limited Chunking](#https://github.com/Joe12827/RAG-Pipeline/blob/e48a47fe9318639df21d6a99b3f32d521ff8715b/src/chunker.py#L38): 512 Tokens + 10 Token Overlap
+### [Token-Limited Chunking](#https://github.com/Joe12827/RAG-Pipeline/blob/e48a47fe9318639df21d6a99b3f32d521ff8715b/src/chunker.py#L38): 100 Tokens + 10 Token Overlap
 
 ```
 [3 Chunks Generated]
@@ -173,6 +177,34 @@ or Longitude either, but thought they were nice grand words to
 say.)
 ```
 
+## Embedding
+Once the documents are seperated into chunks, embeddings are created
+```python
+Document(
+	text="`Well!' thought Alice to herself, `after such a fa...",
+	vector=array([ 0.00016985, -0.02154499, ..., 0.00395041,  0.00889554],
+		shape=(2560,),
+		dtype=float32),
+	source='alice_in_wonderland_short.txt')
+```
+
+## Retrieval
+
+When a question is asked, the query is tokenized and the top-k results are retreived from the vector database (Pinecone)
+Then, the query and documents gathered are fed into an LLM.
+```
+Query: What happens to Alice after she drinks from the bottle labeled "Drink Me"?
+
+chunk-12: Score: 0.5194
+chunk-5:  Score: 0.5010
+chunk-18: Score: 0.4938
+chunk-44: Score: 0.4789
+chunk-58: Score: 0.4637'
+
+Feeding context to LLM...
+
+Answer: After Alice drinks from the bottle labeled "Drink Me," she finds that it has a very mixed flavor of cherry-tart, custard, pine-apple, roast turkey, toffee, and hot buttered toast. She finishes it off quickly, and then notices that she has shrunk down to a tiny size, only 10 inches high.
+```
 
 ## Author
 **Joe Wesnofske - Joe12827**

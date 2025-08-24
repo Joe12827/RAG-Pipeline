@@ -91,6 +91,9 @@ class IngestionPipeline:
 
                 for embedding, chunk in zip(embeddings, chunks):
                     documents.append(Document(vector=embedding, text=chunk, source=file_name))
-            
-        self.pinecone_upload(documents)
+        
+        print(f"Total documents to upload: {len(documents)}")
+        for doc in documents[:3]:
+            print(doc)
+        # self.pinecone_upload(documents)
         

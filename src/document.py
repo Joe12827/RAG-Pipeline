@@ -11,4 +11,4 @@ class Document:
         }
 
     def __repr__(self):
-        return f"Document(text={self.text[:50]!r}..., vector={self.vector!r}, metadata={self.metadata!r})"
+        return f"Document(text={self.text[:50]!r}..., vector={self.vector!r}, source={self.source!r})"

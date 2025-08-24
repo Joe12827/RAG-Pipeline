@@ -10,7 +10,7 @@ class Embedder(ABC):
         pass
 
 class Qwen3Embedder:
-    def __init__(self, model_name="Qwen/Qwen3-Embedding-0.6B", device=None):
+    def __init__(self, model_name="Qwen/Qwen3-Embedding-4B", device=None):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
         self.model = AutoModel.from_pretrained(model_name).to(self.device)
