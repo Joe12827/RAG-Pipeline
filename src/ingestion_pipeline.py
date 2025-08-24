@@ -51,8 +51,41 @@ class IngestionPipeline:
 
         if vectors_to_upsert:
             index.upsert(vectors=vectors_to_upsert)
+    
+    def pinecone_get_top_k(query, top_k=5):
+        '''
+        Get top k similar documents from Pinecone index for a given query.
+        '''
 
-    def process_documents(self, files):
+        load_dotenv()
+        PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+        INDEX_NAME = os.getenv("INDEX_NAME")
+        pc = Pinecone(api_key=PINECONE_API_KEY, environment="us-east-1")
+        index = pc.Index(INDEX_NAME)
+    
+        tokenized_query = Qwen3Embedder().tokenizer(
+            query,
+            max_length=8192,
+            truncation=True,
+            stride=0,
+            return_overflowing_tokens=True,
+            padding="longest",
+            return_tensors="pt",
+            add_special_tokens=False
+        )
+
+        query_embedding = Qwen3Embedder().embed(tokenized_query, already_tokenized=True)[0].tolist()
+        
+
+        results = index.query(
+            vector=query_embedding,
+            top_k=top_k,
+            include_metadata=True  # get metadata for each matched vector
+        )
+
+        return results['matches']
+
+    def process_documents(self, files, embeddings_batch_size=10):
         """
         Create Document objects from a list of files by processing, chunking, and embedding them.
         """
@@ -76,7 +109,14 @@ class IngestionPipeline:
                 chunk_count = len(tokenized_chunks["input_ids"])
                 print(f"Generated {chunk_count} chunks")
 
-                embeddings = self.embedder.embed(tokenized_chunks, already_tokenized=True)
+                embeddings = []
+                for i in tqdm(range(0, chunk_count, embeddings_batch_size), desc="Embedding chunks"):
+                    batch_chunks = {
+                        "input_ids": tokenized_chunks["input_ids"][i:i+embeddings_batch_size],
+                        "attention_mask": tokenized_chunks["attention_mask"][i:i+embeddings_batch_size]
+                    }
+                    batch_embeddings = self.embedder.embed(batch_chunks, already_tokenized=True)
+                    embeddings.extend(batch_embeddings)
 
                 for embedding, decoded_chunk in zip(embeddings, decoded_chunks):
                     documents.append(Document(vector=embedding, text=decoded_chunk, source=file_name))
@@ -86,14 +126,18 @@ class IngestionPipeline:
 
                 chunk_count = len(chunks)
                 print(f"Generated {chunk_count} chunks")
-                
-                embeddings = self.embedder.embed(chunks, already_tokenized=False)
+
+                embeddings = []
+                for i in tqdm(range(0, chunk_count, embeddings_batch_size), desc="Embedding chunks"):
+                    batch_chunks = chunks[i:i+embeddings_batch_size]
+                    batch_embeddings = self.embedder.embed(batch_chunks, already_tokenized=True)
+                    embeddings.extend(batch_embeddings)
 
                 for embedding, chunk in zip(embeddings, chunks):
                     documents.append(Document(vector=embedding, text=chunk, source=file_name))
         
         print(f"Total documents to upload: {len(documents)}")
-        for doc in documents[:3]:
+        for doc in documents:
             print(doc)
         # self.pinecone_upload(documents)
         
